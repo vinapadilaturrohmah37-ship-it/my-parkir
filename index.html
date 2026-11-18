@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistem Manajemen Parkir</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-box">
+            <h1>🚗 Sistem Parkir</h1>
+            <p class="subjudul">Silakan login untuk mengakses sistem</p>
+            
+            <form id="formLogin">
+                <div class="input-group">
+                    <label for="username">👤 Username</label>
+                    <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">🔒 Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" required>
+                </div>
+                <button type="submit" class="btn-login">Masuk ke Sistem</button>
+                <p class="info">Default: <strong>admin</strong> / <strong>admin123</strong></p>
+                <p id="pesanError" class="error"></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data akun (bisa ditambah)
+        const akunValid = {
+            username: "admin",
+            password: "admin123"
+        };
+
+        const formLogin = document.getElementById('formLogin');
+        formLogin.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const pesanError = document.getElementById('pesanError');
+
+            if(user === akunValid.username && pass === akunValid.password) {
+                // Simpan status login & buka dashboard
+                localStorage.setItem('login', 'true');
+                localStorage.setItem('namaUser', user);
+                window.location.href = 'dashboard.html';
+            } else {
+                pesanError.textContent = "❌ Username atau password salah!";
+            }
+        });
+    </script>
+</body>
+</html>
