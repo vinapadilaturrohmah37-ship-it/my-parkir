@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistem Manajemen Parkir</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Cek apakah sudah login -->
+    <script>
+        if(localStorage.getItem('login') !== 'true') {
+            alert("Silakan login terlebih dahulu!");
+            window.location.href = 'index.html';
+        }
+    </script>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h2 class="logo">P Sistem Manajemen Parkir</h2>
+        </div>
+        <div class="header-right">
+            <span id="namaUser">👤 Admin</span>
+            <span id="tanggalSekarang">Rabu, 18 November 2026, 08:28:12</span>
+            <button id="btnLogout" class="btn-logout">Keluar</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Kartu Ringkasan -->
+        <div class="grid-4">
+            <div class="card">
+                <p class="label-card">Kendaraan Parkir</p>
+                <p class="nilai-card" id="jmlParkir">1</p>
+            </div>
+            <div class="card">
+                <p class="label-card">Sisa Slot Tersedia</p>
+                <p class="nilai-card" id="sisaSlot">99</p>
+            </div>
+            <div class="card">
+                <p class="label-card">Total Keluar Hari Ini</p>
+                <p class="nilai-card" id="totalKeluar">0</p>
+            </div>
+            <div class="card">
+                <p class="label-card">Pendapatan Hari Ini</p>
+                <p class="nilai-card hijau" id="pendapatan">Rp 0</p>
+            </div>
+        </div>
+
+        <!-- Menu Tab -->
+        <div class="tab-menu">
+            <button class="tab-btn aktif" data-tab="operasional">Operasional Parkir</button>
+            <button class="tab-btn" data-tab="riwayat">Riwayat Transaksi</button>
+            <button class="tab-btn" data-tab="pengaturan">Pengaturan Tarif & Slot</button>
+        </div>
+
+        <!-- Konten Tab: Operasional Parkir -->
+        <div class="tab-content" id="operasional">
+            <div class="grid-2">
+                <!-- Form Kendaraan Masuk -->
+                <div class="kotak">
+                    <h3>Kendaraan Masuk</h3>
+                    <form id="formMasuk">
+                        <div class="form-group">
+                            <label>Plat Nomor</label>
+                            <input type="text" id="platNomor" placeholder="Contoh: B 1234 XYZ" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jenis Kendaraan</label>
+                            <select id="jenisKendaraan">
+                                <option value="Motor">Motor</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Truk">Truk</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Catatan (Opsional)</label>
+                            <input type="text" id="catatan" placeholder="Contoh: Helm dititip / Area B">
+                        </div>
+                        <button type="submit" class="btn-primer">✅ Catat Masuk</button>
+                    </form>
+                </div>
+
+                <!-- Daftar Kendaraan Sedang Parkir -->
+                <div class="kotak">
+                    <div class="header-kotak">
+                        <h3>Kendaraan Sedang Parkir</h3>
+                        <input type="text" id="cariPlat" placeholder="Cari plat atau kode tiket..." class="cari-input">
+                    </div>
+                    <div class="tabel-wrapp">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiket</th>
+                                    <th>Plat Nomor</th>
+                                    <th>Jenis</th>
+                                    <th>Waktu Masuk</th>
+                                    <th>Durasi & Biaya</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="daftarParkir">
+                                <!-- Contoh Data -->
+                                <tr>
+                                    <td>PKR-AA3QS</td>
+                                    <td>D 20843 DF</td>
+                                    <td><span class="badge truk">Truk</span></td>
+                                    <td>18/11/2026, 08:25</td>
+                                    <td>0j 2m (Rp 8.000)</td>
+                                    <td>
+                                        <button class="btn-keluar">Keluar</button>
+                                        <button class="btn-tiket">Tiket</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Konten Tab Lainnya -->
+        <div class="tab-content tersembunyi" id="riwayat">
+            <div class="kotak">
+                <h3>📜 Riwayat Transaksi</h3>
+                <p>Data transaksi akan muncul di sini</p>
+            </div>
+        </div>
+        <div class="tab-content tersembunyi" id="pengaturan">
+            <div class="kotak">
+                <h3>⚙️ Pengaturan Tarif & Slot</h3>
+                <div class="form-group">
+                    <label>Jumlah Slot Parkir</label>
+                    <input type="number" value="100" id="totalSlot">
+                </div>
+                <div class="form-group">
+                    <label>Tarif Motor (per jam)</label>
+                    <input type="number" value="2000">
+                </div>
+                <div class="form-group">
+                    <label>Tarif Mobil (per jam)</label>
+                    <input type="number" value="5000">
+                </div>
+                <div class="form-group">
+                    <label>Tarif Truk (per jam)</label>
+                    <input type="number" value="8000">
+                </div>
+                <button class="btn-primer">💾 Simpan Pengaturan</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tampilkan nama user
+        document.getElementById('namaUser').textContent = "👤 " + localStorage.getItem('namaUser');
+
+        // Logout
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            localStorage.removeItem('login');
+            localStorage.removeItem('namaUser');
+            window.location.href = 'index.html';
+        });
+
+        // Tanggal sekarang
+        function updateTanggal() {
+            const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            const d = new Date();
+            document.getElementById('tanggalSekarang').textContent = 
+                `${hari[d.getDay()]}, ${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+        }
+        updateTanggal();
+        setInterval(updateTanggal, 1000);
+
+        // Tab Menu
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                tabBtns.forEach(b => b.classList.remove('aktif'));
+                tabContents.forEach(c => c.classList.add('tersembunyi'));
+                this.classList.add('aktif');
+                document.getElementById(tabId).classList.remove('tersembunyi');
+            });
+        });
+
+        // Form Kendaraan Masuk
+        let nomorTiket = 1;
+        document.getElementById('formMasuk').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const plat = document.getElementById('platNomor').value;
+            const jenis = document.getElementById('jenisKendaraan').value;
+            const catatan = document.getElementById('catatan').value;
+            
+            // Buat kode tiket acak
+            const kodeTiket = 'PKR-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            const sekarang = new Date();
+            const waktu = `${sekarang.getDate()}/${sekarang.getMonth()+1}/${sekarang.getFullYear()}, ${String(sekarang.getHours()).padStart(2,'0')}:${String(sekarang.getMinutes()).padStart(2,'0')}`;
+            
+            // Tambah ke tabel
+            const tbody = document.getElementById('daftarParkir');
+            const baru = document.createElement('tr');
+            baru.innerHTML = `
+                <td>${kodeTiket}</td>
+                <td>${plat}</td>
+                <td><span class="badge ${jenis.toLowerCase()}">${jenis}</span></td>
+                <td>${waktu}</td>
+                <td>0j 0m (Rp 0)</td>
+                <td>
+                    <button class="btn-keluar">Keluar</button>
+                    <button class="btn-tiket">Tiket</button>
+                </td>
+            `;
+            tbody.insertBefore(baru, tbody.firstChild);
+            
+            // Update ringkasan
+            const jmlParkir = parseInt(document.getElementById('jmlParkir').textContent) + 1;
+            document.getElementById('jmlParkir').textContent = jmlParkir;
+            document.getElementById('sisaSlot').textContent = parseInt(document.getElementById('totalSlot').value) - jmlParkir;
+            
+            // Reset form
+            this.reset();
+            alert("✅ Kendaraan tercatat masuk! Tiket: " + kodeTiket);
+        });
+    </script>
+</body>
+</html>
